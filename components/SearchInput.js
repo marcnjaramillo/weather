@@ -1,48 +1,6 @@
 import React, { Component, useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 
-// class SearchInput extends Component {
-
-//   state = {
-//     text: ''
-//   }
-
-//   handleChangeText = text => {
-//     this.setState({ text });
-//   }
-
-//   handleSubmitEditing = () => {
-//     const { onSubmit } = this.props;
-//     const { text } = this.state;
-
-//     if (!text) return;
-
-//     onSubmit(text);
-//     this.setState({ text: '' });
-//   };
-
-
-//   render() {
-//     const { placeholder } = this.props;
-//     const { text } = this.state;
-//     return (
-//       <View style={styles.container}>
-//         <TextInput
-//           autoCorrect={false}
-//           value={text}
-//           placeholder={placeholder}
-//           placeholderTextColor='white'
-//           underlineColorAndroid='transparent'
-//           style={styles.textInput}
-//           clearButtonMode='always'
-//           onChangeText={this.handleChangeText}
-//           onSubmitEditing={this.handleSubmitEditing}
-//         />
-//       </View>
-//     )
-//   }
-// };
-
 const SearchInput = ({ placeholder, onSubmit }) => {
 
   const [input, setInput] = useState('');
@@ -52,8 +10,6 @@ const SearchInput = ({ placeholder, onSubmit }) => {
   }
 
   const handleSubmitEditing = () => {
-
-    // const { text } = input;
 
     if (!input) return;
 
@@ -78,7 +34,6 @@ const SearchInput = ({ placeholder, onSubmit }) => {
   )
 
 };
-
 
 const styles = StyleSheet.create({
   container: {

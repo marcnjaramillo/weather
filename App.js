@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import {
   ImageBackground,
   KeyboardAvoidingView,
@@ -11,47 +11,6 @@ import {
 import getImageForWeather from './utils/getImageForWeather';
 
 import SearchInput from './components/SearchInput';
-
-// class App extends Component {
-
-//   state = {
-//     location: 'San Fransisco'
-//   }
-
-//   handleUpdateLocation = city => {
-//     this.setState({
-//       location: city,
-//     });
-//   };
-
-//   render() {
-//     const { location } = this.state;
-
-//     return (
-//       <KeyboardAvoidingView
-//         style={styles.container}
-//         behavior='height'
-//       >
-//         <ImageBackground
-//           source={getImageForWeather('Clear')}
-//           style={styles.imageContainer}
-//           imageStyle={styles.image}
-//         >
-//           <View style={styles.detailsContainer}>
-//             <Text style={[styles.largeText, styles.textStyle]}>{location}</Text>
-//             <Text style={[styles.smallText, styles.textStyle]}>Slightly cloudy</Text>
-//             <Text style={[styles.largeText, styles.textStyle]}>24°</Text>
-//             <SearchInput
-//               placeholder='Search any city'
-//               onSubmit={this.handleUpdateLocation}
-//             />
-//           </View>
-
-//         </ImageBackground>
-//       </KeyboardAvoidingView>
-//     );
-//   }
-// }
 
 const App = () => {
 
