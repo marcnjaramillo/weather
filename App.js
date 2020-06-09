@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ActivityIndicator,
   ImageBackground,
@@ -15,219 +15,120 @@ import getImageForWeather from './utils/getImageForWeather';
 
 import SearchInput from './components/SearchInput';
 
-class App extends Component {
 
-  state = {
+const App = () => {
+
+  const [weatherData, setWeatherData] = useState({
     loading: false,
     error: false,
     location: '',
-    temperature: 0,
-    weather: ''
-  }
+    weather: '',
+    temperature: 0
+  });
 
-  componentDidMount() {
-    this.handleUpdateLocation('San Francisco');
-  }
+  const {
+    loading,
+    error,
+    location,
+    weather,
+    temperature
+  } = weatherData;
+
+
+
+  useEffect(() => {
+    handleUpdateLocation('San Francisco');
+  }, [])
 
   handleUpdateLocation = async city => {
     if (!city) return;
 
-    this.setState({ loading: true }, async () => {
+    setWeatherData({ loading: true });
+
+    async function fetchWeatherData() {
       try {
         const locationId = await fetchLocationId(city);
         const { location, weather, temperature } = await fetchWeather(
           locationId,
         );
 
-        this.setState({
+        setWeatherData({
           loading: false,
           error: false,
-          location,
-          weather,
-          temperature,
+          location: location,
+          weather: weather,
+          temperature: temperature
         });
       } catch (e) {
-        this.setState({
+        setWeatherData({
           loading: false,
-          error: true,
+          error: false
         });
       }
-    });
+    };
+
+    fetchWeatherData();
   };
 
-  render() {
-
-    const {
-      loading,
-      error,
-      location,
-      temperature,
-      weather
-    } = this.state
-
-    return (
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior='height'
+  return (
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior='height'
+    >
+      <StatusBar barStyle="light-content" />
+      <ImageBackground
+        source={getImageForWeather(weather)}
+        style={styles.imageContainer}
+        imageStyle={styles.image}
       >
-        <StatusBar barStyle="light-content" />
-        <ImageBackground
-          source={getImageForWeather(weather)}
-          style={styles.imageContainer}
-          imageStyle={styles.image}
-        >
-          <View style={styles.detailsContainer}>
-            <ActivityIndicator
-              animating={loading}
-              color="white"
-              size="large"
-            />
+        <View style={styles.detailsContainer}>
+          <ActivityIndicator
+            animating={loading}
+            color="white"
+            size="large"
+          />
 
-            {!loading && (
-              <View>
-                {error && (
-                  <Text style={[styles.smallText, styles.textStyle]}>
-                    Could not load weather, please try a different
-                    city.
+          {!loading && (
+            <View>
+              {error && (
+                <Text style={[styles.smallText, styles.textStyle]}>
+                  Could not load weather, please try a different
+                  city.
+                </Text>
+              )}
+
+              {!error && (
+                <View>
+                  <Text
+                    style={[styles.largeText, styles.textStyle]}
+                  >
+                    {location}
                   </Text>
-                )}
+                  <Text
+                    style={[styles.smallText, styles.textStyle]}
+                  >
+                    {weather}
+                  </Text>
+                  <Text
+                    style={[styles.largeText, styles.textStyle]}
+                  >
+                    {`${Math.round(temperature)}°C / ${Math.round((temperature * 1.8) + 32)}°F`}
+                  </Text>
+                </View>
+              )}
 
-                {!error && (
-                  <View>
-                    <Text
-                      style={[styles.largeText, styles.textStyle]}
-                    >
-                      {location}
-                    </Text>
-                    <Text
-                      style={[styles.smallText, styles.textStyle]}
-                    >
-                      {weather}
-                    </Text>
-                    <Text
-                      style={[styles.largeText, styles.textStyle]}
-                    >
-                      {`${Math.round(temperature)}°`}
-                    </Text>
-                  </View>
-                )}
+              <SearchInput
+                placeholder="Search any city"
+                onSubmit={handleUpdateLocation}
+              />
+            </View>
+          )}
+        </View>
 
-                <SearchInput
-                  placeholder="Search any city"
-                  onSubmit={this.handleUpdateLocation}
-                />
-              </View>
-            )}
-          </View>
-
-        </ImageBackground>
-      </KeyboardAvoidingView>
-    );
-  }
+      </ImageBackground>
+    </KeyboardAvoidingView>
+  );
 }
-
-// const App = () => {
-
-//   const [loading, setLoading] = useState(false);
-
-//   const [error, setError] = useState(false);
-
-//   const [location, setLocation] = useState('');
-
-//   const [weather, setWeather] = useState('');
-
-//   const [temperature, setTemperature] = useState(0);
-
-
-
-//   useEffect(() => {
-//     handleUpdateLocation('San Francisco');
-//     if (loading === true) {
-//       async () => {
-//         try {
-//           const locationId = await fetchLocationId(city);
-//           const { location, weather, temperature } = await fetchWeather(
-//             locationId,
-//           );
-
-//           setLoading(false);
-//           setError(false);
-//           setLocation(location);
-//           setWeather(weather);
-//           setTemperature(temperature);
-//         } catch (e) {
-//           setLoading(false);
-//           setError(true);
-//         }
-//       };
-//     };
-//   }, [location])
-
-//   handleUpdateLocation = async city => {
-//     if (!city) return;
-
-//     setLoading(true);
-//   };
-
-//   return (
-//     <KeyboardAvoidingView
-//       style={styles.container}
-//       behavior='height'
-//     >
-//       <StatusBar barStyle="light-content" />
-//       <ImageBackground
-//         source={getImageForWeather(weather)}
-//         style={styles.imageContainer}
-//         imageStyle={styles.image}
-//       >
-//         <View style={styles.detailsContainer}>
-//           <ActivityIndicator
-//             animating={loading}
-//             color="white"
-//             size="large"
-//           />
-
-//           {!loading && (
-//             <View>
-//               {error && (
-//                 <Text style={[styles.smallText, styles.textStyle]}>
-//                   Could not load weather, please try a different
-//                   city.
-//                 </Text>
-//               )}
-
-//               {!error && (
-//                 <View>
-//                   <Text
-//                     style={[styles.largeText, styles.textStyle]}
-//                   >
-//                     {location}
-//                   </Text>
-//                   <Text
-//                     style={[styles.smallText, styles.textStyle]}
-//                   >
-//                     {weather}
-//                   </Text>
-//                   <Text
-//                     style={[styles.largeText, styles.textStyle]}
-//                   >
-//                     {`${Math.round(temperature)}°`}
-//                   </Text>
-//                 </View>
-//               )}
-
-//               <SearchInput
-//                 placeholder="Search any city"
-//                 onSubmit={handleUpdateLocation}
-//               />
-//             </View>
-//           )}
-//         </View>
-
-//       </ImageBackground>
-//     </KeyboardAvoidingView>
-//   );
-// }
 
 const styles = StyleSheet.create({
   container: {
